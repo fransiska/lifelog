@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20151102071822) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "categories", force: :cascade do |t|
     t.string   "name"
     t.string   "notes"
@@ -24,7 +27,7 @@ ActiveRecord::Schema.define(version: 20151102071822) do
     t.string   "color"
   end
 
-  add_index "categories", ["parent_id"], name: "index_categories_on_parent_id"
+  add_index "categories", ["parent_id"], name: "index_categories_on_parent_id", using: :btree
 
   create_table "clothes", force: :cascade do |t|
     t.string   "name"
@@ -60,6 +63,6 @@ ActiveRecord::Schema.define(version: 20151102071822) do
     t.integer  "duration"
   end
 
-  add_index "timelogs", ["category_id"], name: "index_timelogs_on_category_id"
+  add_index "timelogs", ["category_id"], name: "index_timelogs_on_category_id", using: :btree
 
 end
