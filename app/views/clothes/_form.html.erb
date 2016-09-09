@@ -1,0 +1,38 @@
+<% if @clothe.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@clothe.errors.count, "error") %>:</h2>
+  <ul>
+    <% @clothe.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<%= form_for @clothe  do |f| %>
+<p>
+  <%= f.label :name %><br>
+  <%= f.text_field :name %>
+</p>
+
+<p>
+  <%= f.label :brand %><br>
+  <%= f.text_field :brand %>
+</p>
+
+<p>
+  <%= f.label :bought %>
+  <%= f.datetime_select :bought %>
+</p>
+
+<p>
+  <%= f.label :worn %>
+  <%= f.text_field :worn %>
+  <br />
+  <%= @clothe.wear %>
+</p>
+
+<p>
+  <%= f.submit %>
+</p>
+<% end %>

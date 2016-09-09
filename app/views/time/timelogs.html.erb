@@ -1,0 +1,105 @@
+<%= javascript_include_tag "d3/d3.min.js" %>
+
+
+<script>
+ var data = <%= @summary.to_json.html_safe %>
+ var width = $('body').width()*0.95, barHeight = 25;
+ var txtWidth = 90;
+var axisHeight = 30;
+var rightSpace = 10;
+ var barWidth = width-txtWidth-rightSpace;
+var hourscale = d3.scale.linear()
+.domain([0,24])
+.range([0,barWidth])
+
+
+ var chart = d3.select("body").append("svg")
+	       .attr("width", width)
+	       .attr("height", axisHeight + barHeight * <%= @summary[:head][:total][:days] %>)//data.row.length) // 
+
+chart    .append("g")
+    .call(d3.svg.axis()
+          .scale(hourscale))
+	  .attr("transform", 
+              "translate(" + txtWidth + "," + barHeight * <%= @summary[:head][:total][:days] %> + ")");
+
+ var bar = chart.append("svg:g")
+		.selectAll("g")
+		.data(data.row)
+			  .enter().append("g")
+
+ var daytext = chart.append("svg:g")
+		     .selectAll("text")
+		     .data(data.dates)
+			       .enter().append("text")
+
+ daytext  .attr("dy", ".35em")
+	   .attr("x", 0)
+	   .attr("y", function(d,i) {return i*barHeight+barHeight/2})
+	   .text(function(d) {return d})
+
+ var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("pointer-events", "none")
+
+ bar.append("rect")
+    .attr('class', 'bar')
+    .attr("x", function(d) {return txtWidth + d.dayaccum/3600*barWidth/24}) //function(d) {return ((d.dayaccum/3600)*(barWidth/24)) }//(d.dayaccum/3600*barWidth/24)+5 })
+    .attr("y", function(d,i) {return ((d.day-1) * barHeight) })//barHeight*i}) 
+    .style("fill", function(d) {return d.color})
+    .attr("width", function(d) {return d.duration/3600*barWidth/24;})
+    .attr("height", barHeight - 1)
+    .style("stroke", "black")
+    .style("opacity", 1.0)
+    .style("stroke-width", 1)
+    .on('mouseover', function(d){
+	var nodeSelection = d3.select(this).style({opacity:'0.5'});
+	var timelogTimeFormat = (d.time)
+	return tooltip.text(timelogTimeFormat + " (" +  (Math.round(d.duration/3600*10)/10) + ") " +d.event)
+	    .style("top", parseInt(d3.select(this).attr("y"))+barHeight/2 + "px")
+	    .style("left", parseInt(d3.select(this).attr("x"))+10 + "px")
+	    .style("visibility", "visible")	
+    })
+    .on('mouseout', function(d){
+	d3.select(this).style({opacity:'1.0',})
+	return tooltip.style("visibility", "hidden")
+	    .style("top", 0 + "px")
+	    .style("left", 0 + "px")
+    })
+
+</script>
+
+<p>
+<%= link_to 'Home', root_path %>
+<%= link_to 'Category', time_categories_path %>
+</p>
+
+<%= form_tag time_timelogs_path, multipart: true do %>
+  <%= label(:time, :begin) %>
+  <%= date_select("time","begin", selected: @summary[:head][:range][:begin]) %>
+  <br />
+  <%= label(:time, :end) %>
+  <%= date_select("time","end", selected: @summary[:head][:range][:end]) %>
+  </br>
+  <%= submit_tag "Submit" %>
+<% end %>
+
+<p>
+<%= Time.zone.now %>
+<%= link_to "Today", time_timelogs_path(begin: Time.zone.now.strftime('%Y-%m-%d 00:00'),end: Time.zone.now.strftime('%Y-%m-%d 23:59')), method: :post %>
+<%= link_to "Yesterday", time_timelogs_path(begin: ((Time.zone.now)-1.day).strftime('%Y-%m-%d 00:00'),end: ((Time.zone.now)-1.day).strftime('%Y-%m-%d 23:59')), method: :post %>
+<%= link_to "Last week", time_timelogs_path(begin: ((Time.zone.now)-1.week).strftime('%Y-%m-%d 00:00'),end: (Time.zone.now).strftime('%Y-%m-%d 23:59')), method: :post %>
+</p>
+
+<p>
+remaining <%= @summary[:head][:prev][:remaining] %> <br />
+days <%= @summary[:head][:total][:days] %>
+</p>
+
+<%# @summary[:row].sort_by{|v| v[:time]}.each { |v| %>
+<% @summary[:row].sort_by{|t| t[:time]}.reverse.each { |v| %>
+  <%= render "timelogs/timelog", :timelog => Timelog.find_by_id(v[:id]) %>
+<% } %>

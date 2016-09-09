@@ -1,0 +1,50 @@
+<% if flash[:notice] %>
+<div class="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<h1>Clothes</h1>
+
+<%= link_to 'New clothes', new_clothe_path %> <%= link_to 'Home', root_path %>
+
+<h2>Today</h2>
+<table>
+<% @clothes.each do |clothe| %>
+<%if clothe.wear.sort_by{|date| DateTime.parse(date)}.last == Date.today.strftime("%d %b %Y") %>
+<%= render clothe %>
+<% end %>
+<% end %>
+</table>
+
+<h2>List</h2>
+<p>Number of clothes <%= Clothe.count %></p>
+
+<table>
+  <tr>
+    <th><%= sortable "id" %></th>
+    <th><%= sortable "brand" %></th>
+    <th><%= sortable "name" %></th>
+    <th><%= sortable "times" %></th>
+    <th><%= sortable "lastWorn", "last worn" %></th>
+    <th><%= sortable "bought" %></th>
+    <th>today</th>
+  </tr>
+
+  <% @clothes.each do |clothe| %>
+  <%= render clothe %>
+  <% end %>
+</table>
+
+<h2>Per Day</h2>
+<table>
+  <% @clothesPerDay.sort_by{|date,ids| DateTime.parse(date)}.reverse_each do |date,ids| %>
+  <tr>
+    <td><%= date %></td>
+    <td>
+      <% ids.each do |id| %>
+      <% clothe = Clothe.find_by_id(id) %>
+      <%= link_to clothe.name, edit_clothe_path(clothe) %><br />
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>
