@@ -1,4 +1,5 @@
-<%= javascript_include_tag "d3/d3.min.js" %>
+<% #= javascript_include_tag "d3/d3.min.js" %>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 
 
 <script>
@@ -8,7 +9,7 @@
 var axisHeight = 30;
 var rightSpace = 10;
  var barWidth = width-txtWidth-rightSpace;
-var hourscale = d3.scale.linear()
+var hourscale = d3.scaleLinear()
 .domain([0,24])
 .range([0,barWidth])
 
@@ -18,7 +19,7 @@ var hourscale = d3.scale.linear()
 	       .attr("height", axisHeight + barHeight * <%= @summary[:head][:total][:days] %>)//data.row.length) // 
 
 chart    .append("g")
-    .call(d3.svg.axis()
+    .call(d3.axisBottom()
           .scale(hourscale))
 	  .attr("transform", 
               "translate(" + txtWidth + "," + barHeight * <%= @summary[:head][:total][:days] %> + ")");
