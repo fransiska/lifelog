@@ -1,7 +1,6 @@
 <% #= javascript_include_tag "d3/d3.min.js" %>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 
-
 <script>
  var data = <%= @summary.to_json.html_safe %>
  var width = $('body').width()*0.95, barHeight = 25;
@@ -40,12 +39,17 @@ chart    .append("g")
 	   .text(function(d) {return d})
 
  var tooltip = d3.select("body")
-    .append("div")
-    .style("position", "absolute")
-    .style("z-index", "10")
-    .style("visibility", "hidden")
-    .style("pointer-events", "none")
-
+   .append("div")
+   .style("position", "absolute")
+   .style("z-index", "10")
+ .style("visibility", "hidden")
+ .style("background","white")
+ .style("border-radius","8px")
+    .style("padding","2px")
+   .style("font","12px sans-serif")
+ .style("pointer-events", "none")
+ .style("opacity",".9")
+ 
  bar.append("rect")
     .attr('class', 'bar')
     .attr("x", function(d) {return txtWidth + d.dayaccum/3600*barWidth/24}) //function(d) {return ((d.dayaccum/3600)*(barWidth/24)) }//(d.dayaccum/3600*barWidth/24)+5 })
@@ -57,11 +61,13 @@ chart    .append("g")
     .style("opacity", 1.0)
     .style("stroke-width", 1)
     .on('mouseover', function(d){
-	var nodeSelection = d3.select(this).style({opacity:'0.5'});
-	var timelogTimeFormat = (d.time)
-	return tooltip.text(timelogTimeFormat + " (" +  (Math.round(d.duration/3600*10)/10) + ") " +d.event)
-	    .style("top", parseInt(d3.select(this).attr("y"))+barHeight/2 + "px")
-	    .style("left", parseInt(d3.select(this).attr("x"))+10 + "px")
+      var nodeSelection = d3.select(this).style({opacity:'0.5'});
+      var timelogTimeFormat =  d3.timeFormat("%H:%M")
+      var thisrect = d3.select(this)
+      var coords = d3.event.pageY
+	return tooltip.text(timelogTimeFormat(d3.isoParse(d.time)) + " (" +  (Math.round(d.duration/3600*10)/10) + "hrs) " +d.event)
+	    .style("top", parseInt(coords)-barHeight/2+ "px")
+	    .style("left", parseInt(thisrect.attr("x"))+10 + "px")
 	    .style("visibility", "visible")	
     })
     .on('mouseout', function(d){
@@ -72,11 +78,6 @@ chart    .append("g")
     })
 
 </script>
-
-<p>
-<%= link_to 'Home', root_path %>
-<%= link_to 'Category', time_categories_path %>
-</p>
 
 <%= form_tag time_timelogs_path, multipart: true do %>
   <%= label(:time, :begin) %>
