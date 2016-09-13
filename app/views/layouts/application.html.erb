@@ -15,6 +15,40 @@
 </head>
 <body>
 
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+	
+	<a class="navbar-brand" href="<%= root_path %>">
+	  <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+	</a>
+
+	<a class="navbar-brand" href="<%= new_timelog_path %>">
+	  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+	</a>
+
+	<!-- <%= link_to 'Category', time_categories_path %> -->
+
+	<a class="navbar-brand" href="<%= time_timelogs_path %>">
+	  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+	</a>
+
+	<a class="navbar-brand" href="<%= url_for controller: 'timelogs' %>">
+	  <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+	</a>
+
+	<a class="navbar-brand" href="<%= url_for controller: 'categories' %>">
+	  <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+	</a>
+
+	<a class="navbar-brand" href="<%= url_for controller: 'clothes' %>">
+	  <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
+	</a>
+	
+      </div>      
+    </div>
+  </nav>
+  
 <%= yield %>
 
 </body>
