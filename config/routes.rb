@@ -1,4 +1,5 @@
 Lifelog::Application.routes.draw do
+  resources :weights
   root 'home#index'
   get "home/index"
 

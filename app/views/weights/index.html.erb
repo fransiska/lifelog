@@ -1,0 +1,95 @@
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script>
+  var data = <%= @weights.to_json.html_safe %>
+
+  // Set the dimensions of the canvas / graph
+  var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+
+  // Parse the date / time
+  //var parseTime = d3.timeParse("%d-%b-%y");
+
+  
+  // Set the ranges
+  var x = d3.scaleTime().range([0, width]);
+  var y = d3.scaleLinear().range([height, 0]);
+
+  // Define the line
+  var valueline = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.weight); });
+
+  // append the svg obgect to the body of the page
+  // appends a 'group' element to 'svg'
+  // moves the 'group' element to the top left margin
+  var svg = d3.select("body").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform",
+  "translate(" + margin.left + "," + margin.top + ")");
+
+  // format the data
+  data.forEach(function(d) {
+      d.date = d3.isoParse(d.date);
+      d.close = +d.close;
+  });
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([54,d3.max(data, function(d) { return d.weight; })]);
+
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline);
+
+  // Add the x Axis
+  svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .attr("class", "line")
+  .call(d3.axisBottom(x));
+
+  // Add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+  
+</script>
+
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'New Weight', new_weight_path %>
+
+If I lose 0.5 kg per week, 
+
+<h1>Listing Weights</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Weight</th>
+      <th>Note</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @weights.each do |weight| %>
+      <tr>
+        <td><%= weight.date %></td>
+        <td><%= weight.weight %></td>
+        <td><%= weight.note %></td>
+        <td><%= link_to 'Show', weight %></td>
+        <td><%= link_to 'Edit', edit_weight_path(weight) %></td>
+        <td><%= link_to 'Destroy', weight, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
