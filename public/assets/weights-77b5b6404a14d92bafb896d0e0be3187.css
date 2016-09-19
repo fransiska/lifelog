@@ -1,0 +1,14 @@
+/* line 5, /Users/fransiska/Git/lifelog/app/assets/stylesheets/weights.css.scss */
+path.line {
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* line 11, /Users/fransiska/Git/lifelog/app/assets/stylesheets/weights.css.scss */
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}

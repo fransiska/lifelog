@@ -1,0 +1,22 @@
+/* line 5, /Users/fransiska/Git/lifelog/app/assets/stylesheets/time.css.scss */
+body {
+  font: 11px sans-serif;
+}
+
+/* line 10, /Users/fransiska/Git/lifelog/app/assets/stylesheets/time.css.scss */
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/* line 16, /Users/fransiska/Git/lifelog/app/assets/stylesheets/time.css.scss */
+.bar {
+  fill: steelblue;
+}
+
+/* line 20, /Users/fransiska/Git/lifelog/app/assets/stylesheets/time.css.scss */
+.x.axis path {
+  display: none;
+}
