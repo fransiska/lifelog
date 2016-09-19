@@ -1,7 +1,7 @@
 Lifelog::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.cache_classes = true
+  config.cache_classes = false
   config.assets.compile = true
   config.assets.precompile =  ['*.js', '*.css', '*.css.erb'] 
   config.serve_static_files = true
