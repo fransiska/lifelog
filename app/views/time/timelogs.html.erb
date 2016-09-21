@@ -3,7 +3,8 @@
 
 <script>
  var data = <%= @summary.to_json.html_safe %>
- var width = $('body').width()*0.95, barHeight = 25;
+ var width = d3.select("body").node().getBoundingClientRect().width*0.95;
+ var barHeight = 25;
  var txtWidth = 90;
 var axisHeight = 30;
 var rightSpace = 10;
