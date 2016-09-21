@@ -7,10 +7,10 @@
 <%= link_to 'New clothes', new_clothe_path %> <%= link_to 'Home', root_path %>
 
 <h2>Today</h2>
-<table>
+<table id="clothes">
 <% @clothes.each do |clothe| %>
 <%if clothe.wear.sort_by{|date| DateTime.parse(date)}.last == Date.today.strftime("%d %b %Y") %>
-<%= render clothe %>
+<%= link_to clothe.name, edit_clothe_path(clothe) %>
 <% end %>
 <% end %>
 </table>
@@ -18,7 +18,7 @@
 <h2>List</h2>
 <p>Number of clothes <%= Clothe.count %></p>
 
-<table>
+<table id="clothes">
   <tr>
     <th><%= sortable "id" %></th>
     <th><%= sortable "brand" %></th>
@@ -35,9 +35,9 @@
 </table>
 
 <h2>Per Day</h2>
-<table>
+<table id="clothes">
   <% @clothesPerDay.sort_by{|date,ids| DateTime.parse(date)}.reverse_each do |date,ids| %>
-  <tr>
+  <tr valign="top">
     <td><%= date %></td>
     <td>
       <% ids.each do |id| %>

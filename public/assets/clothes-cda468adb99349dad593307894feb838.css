@@ -1,0 +1,5 @@
+/* line 5, /Users/fransiska/Git/lifelog/app/assets/stylesheets/clothes.css.scss */
+table#clothes {
+  border-collapse: separate;
+  border-spacing: 5px;
+}
