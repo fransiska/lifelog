@@ -54,6 +54,13 @@ class ClothesController < ApplicationController
     redirect_to clothes_path
   end
   
+  def delete_worn
+    @clothe = Clothe.find(params[:id])
+    @clothe.wear.delete_at(params[:worn_ids].to_i)
+    @clothe.save
+    redirect_to action: 'edit', id: params[:id]
+  end
+
   private
   def clothe_params
     params.require(:clothe).permit(:name, :brand, :bought, :worn) 
@@ -67,4 +74,5 @@ class ClothesController < ApplicationController
   def sort_direction
     params[:direction] || "asc"
   end
+
 end

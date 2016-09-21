@@ -24,6 +24,7 @@ Lifelog::Application.routes.draw do
   resources :clothes do
     collection {
       post :wear_today
+      post :delete_worn      
     }
   end
 

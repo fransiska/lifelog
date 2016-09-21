@@ -2,4 +2,15 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Back', clothes_path %>
+<h4>Worn <%= @clothe.wear.size%> times</h4>
+
+<%= form_tag delete_worn_clothes_path multipart: true do %>
+<%= hidden_field_tag :id, @clothe.id %>
+<% @clothe.wear.each_with_index do |worn,index| %>
+  <%= radio_button_tag "worn_ids", index %> <%= label("worn_ids", index) do worn end %><br />
+<% end %>
+<%= submit_tag "Delete" %>
+<% end %>
+
+
+<p><%= link_to 'Back', clothes_path %></p>
